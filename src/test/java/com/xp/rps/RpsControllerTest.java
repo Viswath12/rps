@@ -17,7 +17,7 @@ public class RpsControllerTest {
     TestRestTemplate restTemplate;
 
     @Autowired
-    RpsInMemoryRepo rpsInMemoryRepo;
+    RpsRepo rpsRepo;
 
     @Test
     void play() {
@@ -32,7 +32,7 @@ public class RpsControllerTest {
         int result = responseEntity.getBody();
         // then
         assertTrue(result > 0);
-        Game savedGame = rpsInMemoryRepo.getGame(result);
+        Game savedGame = rpsRepo.getGame(result);
         Game testGame = TestUtil.getGame();
         testGame.setId(result);
         assertEquals(testGame, savedGame);
@@ -41,7 +41,7 @@ public class RpsControllerTest {
     @Test
     void test_getGame() {
         // setup
-        int gameId = rpsInMemoryRepo.createGame(TestUtil.getGame());
+        int gameId = rpsRepo.createGame(TestUtil.getGame());
         // when
         ResponseEntity<Game> responseEntity = restTemplate.getForEntity("/game/{id}", Game.class, gameId);
         // then
@@ -53,13 +53,13 @@ public class RpsControllerTest {
     @Test
     void test_saveRound() {
         // setup
-        int gameId = rpsInMemoryRepo.createGame(TestUtil.getGame());
+        int gameId = rpsRepo.createGame(TestUtil.getGame());
         // when
         ResponseEntity<Integer> responseEntity = restTemplate.postForEntity("/game/{id}/round", TestUtil.getRound(), Integer.class, gameId);
         // then
         int result = responseEntity.getBody();
         assertTrue(result > 0);
-        Game savedGame = rpsInMemoryRepo.getGame(gameId);
+        Game savedGame = rpsRepo.getGame(gameId);
         assertEquals(1, savedGame.getRoundList().size());
         Round savedRound = savedGame.getRoundList().get(0);
         Round testRound = TestUtil.getRound();

@@ -14,6 +14,11 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+      - name: Startup test database instance
+        run: sudo service mysql start
+      - name: Create rps database and rpsuser
+        run: |
+          mysql -uroot -proot < db/createdb.sql
       - name: Build with Gradle
         run: ./gradlew bootBuildImage --imageName=${{env.DOCKER_HUB_USERNAME}}/rps:build-${{github.run_number}}
       - run: sudo curl -sSL https://get.docker.com/ | sh

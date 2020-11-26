@@ -1,27 +1,29 @@
 package com.xp.rps;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class RpsInMemoryRepoTest {
+@JdbcTest
+@AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
+@Import(JDBCRepo.class) //Somehow @JdbcTest not able to load @Repository, Import to force it happen
+@Transactional //This will cause each test rollback after testing, also rollback the beforeTestRun.sql
+public class RpsRepoTest {
 
-    private RpsInMemoryRepo rpsInMemoryRepo;
-
-
-
-    @BeforeEach
-    public void setup() {
-        rpsInMemoryRepo = new RpsInMemoryRepo();
-    }
+    @Autowired
+    private RpsRepo rpsRepo;
 
     @Test
     public void test_createGame() {
         // when
-        int savedGameId = rpsInMemoryRepo.createGame(TestUtil.getGame());
+        int savedGameId = rpsRepo.createGame(TestUtil.getGame());
         // then
-        Game savedGame = rpsInMemoryRepo.getGame(savedGameId);
+        Game savedGame = rpsRepo.getGame(savedGameId);
         assertEquals(TestUtil.getGame().getRoundNo(), savedGame.getRoundNo());
         assertEquals(TestUtil.getGame().getDecision(), savedGame.getDecision());
         assertEquals(TestUtil.getGame().getPlayer1(), savedGame.getPlayer1());
@@ -31,9 +33,9 @@ public class RpsInMemoryRepoTest {
     @Test
     public void test_getGame() {
         // when
-        int savedGameId = rpsInMemoryRepo.createGame(TestUtil.getGame());
+        int savedGameId = rpsRepo.createGame(TestUtil.getGame());
         // then
-        Game savedGame = rpsInMemoryRepo.getGame(savedGameId);
+        Game savedGame = rpsRepo.getGame(savedGameId);
         assertEquals(savedGameId, savedGame.getId());
         assertEquals(TestUtil.getGame().getRoundNo(), savedGame.getRoundNo());
         assertEquals(TestUtil.getGame().getDecision(), savedGame.getDecision());
@@ -42,19 +44,12 @@ public class RpsInMemoryRepoTest {
     }
 
     @Test
-    public void test_getGame_InvalidId() {
-        // when
-        Game game = rpsInMemoryRepo.getGame(-1);
-        assertNull(game);
-    }
-
-    @Test
     public void test_addRound() {
         // when
-        int savedGameId = rpsInMemoryRepo.createGame(TestUtil.getGame());
-        int savedRoundId = rpsInMemoryRepo.addRound(savedGameId, TestUtil.getRound());
+        int savedGameId = rpsRepo.createGame(TestUtil.getGame());
+        int savedRoundId = rpsRepo.addRound(savedGameId, TestUtil.getRound());
         // then
-        Game savedGame = rpsInMemoryRepo.getGame(savedGameId);
+        Game savedGame = rpsRepo.getGame(savedGameId);
         assertEquals(savedGameId, savedGame.getId());
         assertEquals(TestUtil.getGame().getRoundNo(), savedGame.getRoundNo());
         assertEquals(TestUtil.getGame().getDecision(), savedGame.getDecision());
@@ -63,16 +58,9 @@ public class RpsInMemoryRepoTest {
         assertEquals(1, savedGame.getRoundList().size());
         Round savedRound = savedGame.getRoundList().get(0);
         assertEquals(savedRoundId, savedRound.getId());
-        assertEquals(TestUtil.getRound().getP1(), savedRound.getP1());
-        assertEquals(TestUtil.getRound().getP2(), savedRound.getP2());
+        assertEquals(TestUtil.getRound().getThrow1(), savedRound.getThrow1());
+        assertEquals(TestUtil.getRound().getThrow2(), savedRound.getThrow2());
         assertEquals(TestUtil.getRound().getResult(), savedRound.getResult());
-    }
-
-    @Test
-    public void test_addRound_InvalidId() {
-        // when
-        int id = rpsInMemoryRepo.addRound(-1, TestUtil.getRound());
-        assertEquals(-1, id);
     }
 
 }

@@ -1,12 +1,9 @@
 package com.xp.rps;
 
-import org.springframework.stereotype.Repository;
-
 import java.util.HashMap;
 import java.util.Map;
 
-@Repository
-public class RpsInMemoryRepo {
+public class RpsInMemoryRepo implements RpsRepo {
 
     private static int SEQUENCE = 0;
     private static int ROUND_SEQUNCE = 0;

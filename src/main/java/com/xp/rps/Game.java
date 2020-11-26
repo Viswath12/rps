@@ -17,6 +17,15 @@ public class Game {
         roundList = new ArrayList<>();
     }
 
+    public Game(int id, String player1, String player2, int roundNo, String decision) {
+        this.id = id;
+        this.player1 = player1;
+        this.player2 = player2;
+        this.decision = decision;
+        this.roundNo = roundNo;
+        this.roundList = new ArrayList<>();
+    }
+
     public int getId() {
         return id;
     }

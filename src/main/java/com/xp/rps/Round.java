@@ -5,32 +5,39 @@ import java.util.Objects;
 public class Round {
 
     int id;
-    Throw p1;
-    Throw p2;
+    Throw throw1;
+    Throw throw2;
     Result result;
 
     public Round() {
     }
 
-    public Round(Throw p1, Throw p2) {
-        this.p1 = p1;
-        this.p2 = p2;
+    public Round(Throw throw1, Throw throw2) {
+        this.throw1 = throw1;
+        this.throw2 = throw2;
     }
 
-    public Throw getP1() {
-        return p1;
+    public Round(int id, Throw throw1, Throw throw2, Result result) {
+        this.id = id;
+        this.throw1 = throw1;
+        this.throw2 = throw2;
+        this.result = result;
     }
 
-    public void setP1(Throw p1) {
-        this.p1 = p1;
+    public Throw getThrow1() {
+        return throw1;
     }
 
-    public Throw getP2() {
-        return p2;
+    public void setThrow1(Throw throw1) {
+        this.throw1 = throw1;
     }
 
-    public void setP2(Throw p2) {
-        this.p2 = p2;
+    public Throw getThrow2() {
+        return throw2;
+    }
+
+    public void setThrow2(Throw throw2) {
+        this.throw2 = throw2;
     }
 
     public Result getResult() {
@@ -55,13 +62,13 @@ public class Round {
         if (o == null || getClass() != o.getClass()) return false;
         Round round = (Round) o;
         return id == round.id &&
-                p1 == round.p1 &&
-                p2 == round.p2 &&
+                throw1 == round.throw1 &&
+                throw2 == round.throw2 &&
                 result == round.result;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, p1, p2, result);
+        return Objects.hash(id, throw1, throw2, result);
     }
 }

@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.*;
 public class RpsController {
 
     @Autowired
-    private RpsInMemoryRepo rpsRepo;
+    private RpsRepo rpsRepo;
 
     @PostMapping("/play")
     Round play(@RequestBody Round round) {
-        Result r = RPS.play(round.p1, round.p2);
+        Result r = RPS.play(round.throw1, round.throw2);
         round.setResult(r);
         return round;
     }
@@ -23,7 +23,7 @@ public class RpsController {
 
     @PostMapping("/game/{id}/round")
     int saveRound(@PathVariable int id, @RequestBody Round round) {
-        Result result = RPS.play(round.getP1(), round.getP2());
+        Result result = RPS.play(round.getThrow1(), round.getThrow2());
         round.setResult(result);
         return rpsRepo.addRound(id, round);
     }

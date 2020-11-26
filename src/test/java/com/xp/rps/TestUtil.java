@@ -7,8 +7,8 @@ public class TestUtil {
 
     public static Round getRound() {
         Round r = new Round();
-        r.setP1(Throw.ROCK);
-        r.setP2(Throw.PAPER);
+        r.setThrow1(Throw.ROCK);
+        r.setThrow2(Throw.PAPER);
         r.setResult(Result.P2_WINS);
         return r;
     }
